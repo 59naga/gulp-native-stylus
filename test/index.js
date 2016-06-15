@@ -200,6 +200,34 @@ describe('basic', it => {
     t.true(left === right)
   })
 
+  it('should resolve url if specify `resolve url` option', async t => {
+    const [left, right] = await pluginTest(new File({
+      path: 'dummy.styl',
+      contents: new Buffer('@import "fixtures/resolve-url"')
+    }), [{
+      'resolve url': true
+    }], `
+      body {
+        background: url(\"fixtures/resolve-url.png\");
+      }
+    `)
+    t.true(left === right)
+  })
+
+  it('should resolve url with nocheck if specify `resolve url nocheck` option', async t => {
+    const [left, right] = await pluginTest(new File({
+      path: 'dummy.styl',
+      contents: new Buffer('@import "fixtures/resolve-url-nocheck"')
+    }), [{
+      'resolve url nocheck': true
+    }], `
+      body {
+        background: url(\"fixtures/resolve-url-nocheck/child/child.png\");
+      }
+    `)
+    t.true(left === right)
+  })
+
   it('should export stylus reference', t => {
     t.truthy(plugin.stylus)
   })

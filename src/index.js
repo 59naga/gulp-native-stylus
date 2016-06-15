@@ -66,7 +66,6 @@ const plugin = (...args) => {
       })
     }
 
-    // TODO: resolve test
     if (opts['resolve url']) {
       styl.define('url', stylus.resolver())
     }
