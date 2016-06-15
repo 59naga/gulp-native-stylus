@@ -27,15 +27,15 @@ const pluginTest = (file, args = [], expected = '') => new Promise((resolve, rej
 
 // specs
 describe('basic', it => {
-  const basicFixture = stripIndent(`
+  const basicFixture = new Buffer(stripIndent(`
     body
       color white
-  `)
+  `))
 
   it('should pretty compile .styl to .css', async t => {
     const [left, right] = await pluginTest(new File({
       path: 'dummy.styl',
-      contents: new Buffer(basicFixture)
+      contents: basicFixture
     }), [], `
       body {
         color: #fff;
@@ -47,9 +47,9 @@ describe('basic', it => {
   it('should ignore unless .styl file', async t => {
     const [left, right, file] = await pluginTest(new File({
       path: 'un.less',
-      contents: new Buffer(basicFixture)
+      contents: basicFixture
     }), [],
-      basicFixture
+      basicFixture.toString()
     )
     t.true(left === right)
     t.true(file.path === 'un.less')
@@ -65,7 +65,7 @@ describe('basic', it => {
   it('should compress if specify opts.compress is true', async t => {
     const [left, right] = await pluginTest(new File({
       path: 'dummy.styl',
-      contents: new Buffer(basicFixture)
+      contents: basicFixture
     }), [
       {compress: true}
     ],
@@ -79,7 +79,7 @@ describe('basic', it => {
       path: 'dummy.styl',
       contents: new Buffer('')
     }), [
-      {import: `${__dirname}/fixture.styl`}
+      {import: `${__dirname}/fixtures/import.styl`}
     ], `
       body {
         color: #808080;
@@ -91,7 +91,7 @@ describe('basic', it => {
   it('should import fixture.styl using @import', async t => {
     const [left, right] = await pluginTest(new File({
       path: 'dummy.styl',
-      contents: new Buffer(`@import './fixture.styl'`)
+      contents: new Buffer(`@import './fixtures/import.styl'`)
     }), [], `
       body {
         color: #808080;
@@ -103,7 +103,7 @@ describe('basic', it => {
   it('should include paths if specify opts.include', async t => {
     const [left, right] = await pluginTest(new File({
       path: 'dummy.styl',
-      contents: new Buffer(`@import 'fixture-2'`)
+      contents: new Buffer(`@import 'include'`)
     }), [
       {
         include: `${__dirname}/fixtures`
@@ -153,7 +153,7 @@ describe('basic', it => {
   it('should enable variable if specify opts.define', async t => {
     const [left, right] = await pluginTest(new File({
       path: 'dummy.styl',
-      contents: new Buffer(basicFixture)
+      contents: basicFixture
     }), [{
       define: {
         white: '#000'
@@ -169,7 +169,7 @@ describe('basic', it => {
   it('should enable variable if using gulp-data', async t => {
     const file = new File({
       path: 'dummy.styl',
-      contents: new Buffer(basicFixture)
+      contents: basicFixture
     })
     file.data = {
       white: '#000'
