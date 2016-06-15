@@ -62,7 +62,7 @@ describe('basic', it => {
     })))
   })
 
-  it('should compress if specify options.compress is true', async t => {
+  it('should compress if specify opts.compress is true', async t => {
     const [left, right] = await pluginTest(new File({
       path: 'dummy.styl',
       contents: new Buffer(basicFixture)
@@ -74,7 +74,7 @@ describe('basic', it => {
     t.true(left === right)
   })
 
-  it('should import fixture.styl if specify options.import', async t => {
+  it('should import fixture.styl if specify opts.import', async t => {
     const [left, right] = await pluginTest(new File({
       path: 'dummy.styl',
       contents: new Buffer('')
@@ -100,7 +100,7 @@ describe('basic', it => {
     t.true(left === right)
   })
 
-  it('should include paths if specify options.include', async t => {
+  it('should include paths if specify opts.include', async t => {
     const [left, right] = await pluginTest(new File({
       path: 'dummy.styl',
       contents: new Buffer(`@import 'fixture-2'`)
@@ -116,7 +116,7 @@ describe('basic', it => {
     t.true(left === right)
   })
 
-  it('should load plugin if specify options.use', async t => {
+  it('should load plugin if specify opts.use', async t => {
     const [left, right] = await pluginTest(new File({
       path: 'dummy.styl',
       contents: new Buffer(`
@@ -150,7 +150,7 @@ describe('basic', it => {
     t.true(left === right)
   })
 
-  it('should enable variable if specify options.define', async t => {
+  it('should enable variable if specify opts.define', async t => {
     const [left, right] = await pluginTest(new File({
       path: 'dummy.styl',
       contents: new Buffer(basicFixture)
@@ -183,7 +183,7 @@ describe('basic', it => {
     t.true(left === right)
   })
 
-  it('should enable raw-variable if specify options.rawDefine', async t => {
+  it('should enable raw-variable if specify opts.rawDefine', async t => {
     const [left, right] = await pluginTest(new File({
       path: 'dummy.styl',
       contents: new Buffer(stripIndent(`
@@ -200,7 +200,7 @@ describe('basic', it => {
     t.true(left === right)
   })
 
-  it('should resolve url if specify `resolve url` option', async t => {
+  it('should resolve url if specify opts[`resolve url`]', async t => {
     const [left, right] = await pluginTest(new File({
       path: 'dummy.styl',
       contents: new Buffer('@import "fixtures/resolve-url"')
@@ -208,13 +208,13 @@ describe('basic', it => {
       'resolve url': true
     }], `
       body {
-        background: url(\"fixtures/resolve-url.png\");
+        background: url("fixtures/resolve-url.png");
       }
     `)
     t.true(left === right)
   })
 
-  it('should resolve url with nocheck if specify `resolve url nocheck` option', async t => {
+  it('should resolve url with nocheck if specify opts[`resolve url nocheck`]', async t => {
     const [left, right] = await pluginTest(new File({
       path: 'dummy.styl',
       contents: new Buffer('@import "fixtures/resolve-url-nocheck"')
@@ -222,7 +222,49 @@ describe('basic', it => {
       'resolve url nocheck': true
     }], `
       body {
-        background: url(\"fixtures/resolve-url-nocheck/child/child.png\");
+        background: url("fixtures/resolve-url-nocheck/child/child.png");
+      }
+    `)
+    t.true(left === right)
+  })
+
+  it('should convert url to datauri if specify opts.urlfunc', async t => {
+    const [left, right] = await pluginTest(new File({
+      path: 'dummy.styl',
+      contents: new Buffer(`
+        body
+          background url('fixtures/resolve-url.png')
+      `)
+    }), [{
+      urlfunc: 'url'
+    }], `
+      body {
+        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGD4DwABBAEAfbLI3wAAAABJRU5ErkJggg==");
+      }
+    `)
+    t.true(left === right)
+  })
+
+  it('should convert url to datauri if specify opts.urlfunc at object/array', async t => {
+    const [left, right] = await pluginTest(new File({
+      path: 'dummy.styl',
+      contents: new Buffer(`
+        body
+          background data-url('fixtures/resolve-url.png')
+        body
+          background data-url-unlimited('fixtures/resolve-url.png')
+      `)
+    }), [{
+      urlfunc: [
+        {name: 'data-url', limit: 10},
+        {name: 'data-url-unlimited'}
+      ]
+    }], `
+      body {
+        background: url("fixtures/resolve-url.png");
+      }
+      body {
+        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGD4DwABBAEAfbLI3wAAAABJRU5ErkJggg==");
       }
     `)
     t.true(left === right)
