@@ -1,0 +1,39 @@
+@import 'kouto-swiss'
+@import 'sanitize.styl'
+@import 'jeet'
+@import 'stylus-responsive-breakpoints'
+
+// debug = !isProduction
+
+families_mincho = YuMincho,'游明朝','Yu Mincho','ヒラギノ明朝 Pro W3','Hiragino Mincho Pro',Meiryo,serif
+families_paddy = Paddy
+families_herenosora = Harenosora, serif
+
+default_color = #333
+primary_color = #e6d996
+secondary_color = #934
+link_color = secondary_color
+visited_color = #ccc
+
+vh_xs = 1.5vh
+vh_sm = 2.5vh
+vh_md = 3.0vh
+vh_lg = 5.0vh
+vh_xl = 8.0vh
+
+toc_width = vh_xs * 30
+
+// sanitize.css setting
+root-color = default_color
+root-font-family = families_mincho
+
+/*! begin meyer-reset */
+ks-meyer-reset()
+/*! begin sanitize */
+sanitize()
+
+/*! begin jeet */
+if debug is true
+  edit()
+
+/*! begin your styles */
