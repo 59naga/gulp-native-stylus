@@ -66,6 +66,22 @@ const plugin = (...args) => {
       })
     }
 
+    if (opts.urlfunc) {
+      if (typeof opts.urlfunc === 'string') {
+        styl.define(opts.urlfunc, stylus.url())
+      } else {
+        toArray(opts.urlfunc).forEach(urlfunc => {
+          const urlOptions = {
+            name: 'data-uri',
+            paths: styl.get('paths'),
+            limit: false,
+            ...urlfunc
+          }
+          styl.define(urlOptions.name, stylus.url(urlOptions))
+        })
+      }
+    }
+
     if (opts['resolve url']) {
       styl.define('url', stylus.resolver())
     }
