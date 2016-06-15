@@ -200,23 +200,6 @@ describe('basic', it => {
     t.true(left === right)
   })
 
-  it('should generate sourceMap if specify options.sourcemap', async t => {
-    const [left, right, file] = await pluginTest(new File({
-      base: '.',
-      cwd: '.',
-      path: 'dummy.styl',
-      contents: new Buffer(basicFixture)
-    }), [{sourcemap: true}], `
-      body {
-        color: #fff;
-      }
-    `)
-    t.true(left === right)
-    t.true(file.sourceMap.file === 'dummy.css')
-    t.true(file.sourceMap.mappings.length > 1)
-    t.true(file.sourceMap.sources[0] === 'dummy.styl')
-  })
-
   it('should export stylus reference', t => {
     t.truthy(plugin.stylus)
   })
