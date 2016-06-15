@@ -45,8 +45,8 @@ but `gulp-native-stylus` frinedly to [pnpm]!!
 * `opts.set`: if specify `object`, set environment of stylus.
 * `opts.define`: if specify `object`, set variables of stylus.
 * `opts.rawDefine`: if specify `object`, set raw variables of stylus.
-* `opts['resolve url']`: if specify `true`, run `styl.define('url', stylus.resolver())`
-* `opts['resolve url nocheck']`: if specify `true`, run `styl.define('url', stylus.resolver({nocheck: true}))`
+* `opts['resolve url']`: if specify `true`, set `opts.define('url', stylus.resolver())`
+* `opts['resolve url nocheck']`: if specify `true`, set `opts.define('url', stylus.resolver({nocheck: true}))`
 
 example:
 
