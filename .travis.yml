@@ -21,7 +21,7 @@ node_js:
 before_script:
   - npm prune
 script:
-  - npm test
+  - npm run cover
   - npm run lint
 
 # CODECLIMATE_REPO_TOKEN
