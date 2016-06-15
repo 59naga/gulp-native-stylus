@@ -18,7 +18,7 @@
   </a>
 </p>
 
-[gulp](https://github.com/gulpjs/gulp#readme) [stylus](https://github.com/stylus/stylus#readme) plugin without accord for [pnpm] compatibility
+[gulp](https://github.com/gulpjs/gulp#readme) [stylus](https://github.com/stylus/stylus#readme) plugin without accord for [pnpm] compatibility.
 
 :inbox_tray: Installation
 ---
@@ -45,8 +45,15 @@ but `gulp-native-stylus` frinedly to [pnpm]!!
 * `opts.set`: if specify `object`, set environment of stylus.
 * `opts.define`: if specify `object`, set variables of stylus.
 * `opts.rawDefine`: if specify `object`, set raw variables of stylus.
-* `opts['resolve url']`: if specify `true`, set `opts.define('url', stylus.resolver())`
-* `opts['resolve url nocheck']`: if specify `true`, set `opts.define('url', stylus.resolver({nocheck: true}))`
+* `opts.urlfunc`: if specify `string/object/array`, set `stylus.url()`.
+  * if `string`, performs conversions of data uri at specified function name.
+  * if `object`, performs conversions of data uri at
+    * `object.name{string}`: a function name. (default `data-uri`)
+    * `object.path{array}`: an include paths. (default `opts.set.paths`)
+    * `object.limit{number|bool}`: a max size of conversion. ignore the exceeded files. (default `false` unlimited)
+  * if `array`, handles the value of the array as the `object`.
+* `opts['resolve url']`: if specify `true`, set `opts.define('url', stylus.resolver())`.
+* `opts['resolve url nocheck']`: if specify `true`, set `opts.define('url', stylus.resolver({nocheck: true}))`.
 
 example:
 
